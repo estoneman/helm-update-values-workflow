@@ -3,7 +3,7 @@
 routes:
   00-routeOne: |
     {
-      "id": "routeOneProd",
+      "id": "prodRouteOne",
       "ops": {
         "200": "<html><body>you are allowed</body></html>",
         "201": "<html><body>your changes were honored</body></html>",
@@ -15,7 +15,7 @@ routes:
 
   10-myRoute: |
     {
-      "id": "myRoute",
+      "id": "prodMyRoute",
       "url": "https://example.com",
       "config": {
         "optionOne": "valueOne",
