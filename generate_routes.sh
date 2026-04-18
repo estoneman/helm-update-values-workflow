@@ -3,8 +3,7 @@
 [ "${1:-x}" = 'x' ] && exit 1
 
 env="$1"
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-routes=$script_dir/$1/routes
+routes=$1/routes
 values=$routes/values.yaml
 cat > $values << 'EOF'
 # this file is auto-generated from routes/ directory
