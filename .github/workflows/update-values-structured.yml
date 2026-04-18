@@ -1,7 +1,7 @@
 name: Update values.yaml from routes - structured yaml
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
       - 'routes/**'
   workflow_dispatch:

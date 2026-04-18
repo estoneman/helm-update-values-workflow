@@ -51,6 +51,7 @@ jobs:
       - name: check for changes
         id: git-check
         run: |
+          git diff --exit-code routes/values.yaml
           git diff --exit-code routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
       - name: commit and push changes
         if: steps.git-check.outputs.changed == 'true'
