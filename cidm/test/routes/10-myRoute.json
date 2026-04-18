@@ -1,0 +1,13 @@
+{
+    "id": "myRoute",
+    "url": "https://example.com",
+    "config": {
+        "optionOne": "valueOne",
+        "optionTwo": "fooBar"
+    },
+    "capabilities": [
+        "SYSADMIN",
+        "AUDIT_WRITE",
+        "BPF"
+    ]
+}
