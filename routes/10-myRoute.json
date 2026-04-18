@@ -1,0 +1,7 @@
+{
+    "id": "myRoute",
+    "url": "https://example.com",
+    "config": {
+        "option": "value"
+    }
+}
