@@ -1,9 +1,11 @@
 #!/bin/bash
+
 set -o errexit
 set -o pipefail
 set -o nounset
 
-routes=$(realpath ../../routes)
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+routes=$script_dir/routes
 values=$routes/values.yaml
 cat > $values << 'EOF'
 # this file is auto-generated from routes/ directory

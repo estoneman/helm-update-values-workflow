@@ -8,9 +8,6 @@ on:
 jobs:
   update-values:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: './.github/scripts'
     permissions:
       contents: write
     steps:
@@ -29,7 +26,6 @@ jobs:
       - name: check for changes
         id: git-check
         run: |
-          cat routes/values.yaml
           git diff --exit-code routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
       - name: commit and push changes
         if: steps.git-check.outputs.changed == 'true'
