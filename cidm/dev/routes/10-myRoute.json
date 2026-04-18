@@ -1,5 +1,5 @@
 {
-    "id": "myRoute",
+    "id": "myRouteDev",
     "url": "https://example.com",
     "config": {
         "optionOne": "valueOne",
