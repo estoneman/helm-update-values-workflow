@@ -15,7 +15,7 @@ routes:
 
   10-myRoute: |
     {
-      "id": "myRouteDev",
+      "id": "devMyRoute",
       "url": "https://example.com",
       "config": {
         "optionOne": "valueOne",
