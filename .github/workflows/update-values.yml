@@ -58,7 +58,6 @@ jobs:
 
               fs.writeFileSync(outputFile, JSON.stringify(routes));
               console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
-              console.log(cleanedYaml);
             });
           } catch (error) {
             console.error('error: ', error.message);
