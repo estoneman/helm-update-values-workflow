@@ -1,0 +1,12 @@
+# this file is auto-generated from routes/ directory
+# do not edit manually - changes will be overwritten
+routes:
+  00-routeOne: |
+    {
+        "id": "routeOne",
+        "ops": {
+            "200": "<html><body>you are allowed</body></html>",
+            "403": "<html><body>you are denied</body></html>"
+        }
+    }
+
