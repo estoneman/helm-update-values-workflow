@@ -1,4 +1,4 @@
-name: Update values.yaml from routes
+name: Update values.yaml from routes - structured yaml
 on:
   push:
     branches: [ main ]
