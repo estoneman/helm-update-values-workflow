@@ -6,13 +6,6 @@
                 "200": "<html><body>you are allowed</body></html>",
                 "403": "<html><body>you are denied</body></html>"
             }
-        },
-        {
-            "id": "routeTwo",
-            "ops": {
-                "200": "<html><body>you are allowed</body></html>",
-                "403": "<html><body>you are denied</body></html>"
-            }
         }
     ]
 }
