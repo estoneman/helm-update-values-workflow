@@ -41,7 +41,7 @@ jobs:
           try {
             const files = fs.readdirSync(routesDir);
             files.forEach(file => {
-              if (file.endswith('.json')) {
+              if (file.endsWith('.json')) {
                 const filePath = path.join(routesDir, file);
                 const routeName = path.basename(file, '.json');
 
