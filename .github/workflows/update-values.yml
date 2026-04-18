@@ -56,13 +56,7 @@ jobs:
                 }
               }
 
-              const valuesData = {
-                '# this file is auto-generated from routes/ directory': null,
-                '# do not edit manually - changes will be overwritten': null,
-                routes: routes
-              }
-
-              fs.writeFileSync(outputFile, valuesData);
+              fs.writeFileSync(outputFile, JSON.stringify(routes));
               console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
               console.log(cleanedYaml);
             });
