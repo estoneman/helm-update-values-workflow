@@ -47,6 +47,7 @@ jobs:
           done
 
           echo "generated routes/values.yaml with $(ls routes/*.json | wc -l) routes"
+          cat routes/values.yaml
       - name: check for changes
         id: git-check
         run: |
