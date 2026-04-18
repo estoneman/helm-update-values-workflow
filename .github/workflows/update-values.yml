@@ -58,6 +58,7 @@ jobs:
 
               fs.writeFileSync(outputFile, JSON.stringify(routes));
               console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
+              console.log(JSON.stringify(routes));
             });
           } catch (error) {
             console.error('error: ', error.message);
