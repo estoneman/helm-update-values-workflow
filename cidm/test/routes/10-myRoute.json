@@ -1,5 +1,5 @@
 {
-    "id": "myRoute",
+    "id": "myRouteProd",
     "url": "https://example.com",
     "config": {
         "optionOne": "valueOne",
