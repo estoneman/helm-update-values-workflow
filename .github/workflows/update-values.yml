@@ -98,4 +98,4 @@ jobs:
       - name: no changes detected
         if: steps.git-check.outputs.changed != 'true'
         run: |
-          echo 'no chantges detected in routes. routes/values.yaml is up to date.'
+          echo 'no changes detected in routes. routes/values.yaml is up to date.'
