@@ -1,4 +1,5 @@
 name: Update values.yaml from routes
+
 on:
   push:
     branches: [ main ]
@@ -6,95 +7,84 @@ on:
       - 'cidm/dev/routes/**'
       - 'cidm/test/routes/**'
       - 'cidm/prod/routes/**'
+      - '!**/values.yaml'
   workflow_dispatch:
+
 jobs:
-  cidm-dev-update-values:
+  update-values:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: mark generation script as executable
-        run: chmod u+x generate_routes.sh
-      - name: generate values.yaml from routes
+          fetch-depth: 0
+
+      - name: Install dependencies
         run: |
-          ./generate_routes.sh cidm/dev
-      - name: check for changes
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Mark generation script as executable
+        run: chmod u+x generate_routes.sh
+
+      - name: Generate values.yaml files from route directories
+        run: |
+          set -euo pipefail
+
+          ./generate_routes.sh cidm/dev/routes
+          ./generate_routes.sh cidm/test/routes
+          ./generate_routes.sh cidm/prod/routes
+
+      - name: Check for changed values.yaml files
         id: git-check
         run: |
-          git diff --exit-code cidm/dev/routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
-      - name: commit and push changes
+          set -euo pipefail
+
+          changed_files=()
+
+          for file in \
+            cidm/dev/routes/values.yaml \
+            cidm/test/routes/values.yaml \
+            cidm/prod/routes/values.yaml
+          do
+            if ! git diff --quiet -- "$file"; then
+              changed_files+=("$file")
+            fi
+          done
+
+          if [ ${#changed_files[@]} -gt 0 ]; then
+            {
+              echo "changed=true"
+              echo "files<<EOF"
+              printf '%s\n' "${changed_files[@]}"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push changed values.yaml files
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add cidm/dev/routes/values.yaml
-          git commit -m 'auto-update cidm/dev/routes/values.yaml from route files [skip ci]'
+          set -euo pipefail
+
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          while IFS= read -r file; do
+            [ -n "$file" ] && git add "$file"
+          done <<EOF
+          ${{ steps.git-check.outputs.files }}
+          EOF
+
+          git commit -m "auto-update route values.yaml files from route files [skip ci]"
           git push
-      - name: no changes detected
+
+      - name: No changes detected
         if: steps.git-check.outputs.changed != 'true'
         run: |
-          echo 'no changes detected in routes. cidm/dev/routes/values.yaml is up to date.'
-  cidm-test-update-values:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: mark generation script as executable
-        run: chmod u+x generate_routes.sh
-      - name: generate values.yaml from routes
-        run: |
-          ./generate_routes.sh cidm/test
-      - name: check for changes
-        id: git-check
-        run: |
-          git diff --exit-code cidm/test/routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
-      - name: commit and push changes
-        if: steps.git-check.outputs.changed == 'true'
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add cidm/test/routes/values.yaml
-          git commit -m 'auto-update cidm/test/routes/values.yaml from route files [skip ci]'
-          git push
-      - name: no changes detected
-        if: steps.git-check.outputs.changed != 'true'
-        run: |
-          echo 'no changes detected in routes. cidm/test/routes/values.yaml is up to date.'
-  cidm-prod-update-values:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: mark generation script as executable
-        run: chmod u+x generate_routes.sh
-      - name: generate values.yaml from routes
-        run: |
-          ./generate_routes.sh cidm/prod
-      - name: check for changes
-        id: git-check
-        run: |
-          git diff --exit-code cidm/prod/routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
-      - name: commit and push changes
-        if: steps.git-check.outputs.changed == 'true'
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add cidm/prod/routes/values.yaml
-          git commit -m 'auto-update cidm/prod/routes/values.yaml from route files [skip ci]'
-          git push
-      - name: no changes detected
-        if: steps.git-check.outputs.changed != 'true'
-        run: |
-          echo 'no changes detected in routes. routes/values.yaml is up to date.'
+          echo "No changes detected. values.yaml files are already up to date."

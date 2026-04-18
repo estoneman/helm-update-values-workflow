@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -o errexit
-set -o pipefail
-set -o nounset
-
 [ "${1:-x}" = 'x'] && exit 1
 
 env="$1"
@@ -28,4 +24,4 @@ for file in $routes/*.json; do
   fi
 done
 
-echo "generated routes/values.yaml with $(ls $routes/*.json | wc -l) routes"
+echo "generated $values with $(ls $routes/*.json | wc -l) routes"
