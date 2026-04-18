@@ -2,6 +2,7 @@
     "id": "routeOne",
     "ops": {
         "200": "<html><body>you are allowed</body></html>",
-        "403": "<html><body>you are denied</body></html>"
+        "403": "<html><body>you are denied</body></html>",
+        "404": "<html><body>requested url is not found</body></html>"
     }
 }

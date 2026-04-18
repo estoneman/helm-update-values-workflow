@@ -25,6 +25,10 @@ jobs:
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
+          set -o errexit
+          set -o pipefail
+          set -o nounset
+
           cat > routes/values.yaml << 'EOF'
           # this file is auto-generated from routes/ directory
           # do not edit manually - changes will be overwritten
@@ -38,7 +42,7 @@ jobs:
               echo " processing: $filename"
 
               echo "  $filename: |" >> routes/values.yaml
-              jq . "$file" | sed 's/^/    /' >> routes/values.yaml
+              jq -r . "$file" | sed 's/^/    /' >> routes/values.yaml
               echo '' >> routes/values.yaml
             fi
           done
