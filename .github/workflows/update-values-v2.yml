@@ -75,6 +75,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+          echo 'detected changes in the following files:'
+          echo ${{ steps.git-check.outputs.files }}
           while IFS= read -r file; do
             [ -n "$file" ] && git add "$file"
           done <<EOF
