@@ -21,10 +21,7 @@ jobs:
           node-version: '18'
       - name: install dependencies
         run: |
-          npm -g install js-yaml
-      - name: show available modules
-        run: |
-          npm -g ls
+          apt-get install -y jq
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
@@ -41,7 +38,7 @@ jobs:
               echo " processing: $filename"
 
               echo "  $filename: |" >> routes/values.yaml
-              cat "$file" | sed 's/^/    /' >> routes/values.yaml
+              jq . "$file" | sed 's/^/    /' >> routes/values.yaml
               echo '' >> routes/values.yaml
             fi
           done

@@ -4,5 +4,8 @@
     "config": {
         "optionOne": "valueOne",
         "optionTwo": "fooBar"
-    }
+    },
+    "capabilities": [
+        "SYSADMIN"
+    ]
 }
