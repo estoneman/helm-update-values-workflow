@@ -22,18 +22,18 @@ jobs:
       - name: install dependencies
         run: |
           npm -g install js-yaml
-          which npm
-          which node
       - name: show available modules
         run: |
           npm -g ls
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
+          node_path=$(command -v node)
+          node_path=${node_path%/bin/node}
           cat > convert-routes.js << 'EOF'
           const fs = require('fs');
           const path = require('path');
-          const yaml = require('js-yaml');
+          const yaml = require(process.execPath.replace(/\/bin\/node/, 'lib/node_modules/js-yaml'));
           const routesDir = './routes';
           const outputFile = './routes/values.yaml';
           const routes = {};
