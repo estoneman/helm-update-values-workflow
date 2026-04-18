@@ -2,6 +2,7 @@
     "id": "myRoute",
     "url": "https://example.com",
     "config": {
-        "option": "value"
+        "optionOne": "valueOne",
+        "optionTwo": "fooBar"
     }
 }
