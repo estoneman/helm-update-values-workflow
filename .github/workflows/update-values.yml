@@ -28,45 +28,25 @@ jobs:
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
-          node_path=$(command -v node)
-          node_path=${node_path%/bin/node}
-          cat > convert-routes.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          const yaml = require(process.execPath.replace(/\/bin\/node/, '/lib/node_modules/js-yaml'));
-          const routesDir = './routes';
-          const outputFile = './routes/values.yaml';
-          const routes = {};
-          
-          try {
-            const files = fs.readdirSync(routesDir);
-            files.forEach(file => {
-              if (file.endsWith('.json')) {
-                const filePath = path.join(routesDir, file);
-                const routeName = path.basename(file, '.json');
-
-                try {
-                  const content = fs.readFileSync(filePath, 'utf8');
-                  const jsonData = JSON.parse(content);
-                  routes[routeName] = jsonData;
-                  console.log(`Processed: ${routeName}`);
-                } catch (error) {
-                  console.error(`error processing ${file}:`, error.message);
-                  process.exit(1);
-                }
-              }
-
-              fs.writeFileSync(outputFile, JSON.stringify(routes));
-              console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
-              console.log(JSON.stringify(routes));
-            });
-          } catch (error) {
-            console.error('error: ', error.message);
-            process.exit(1);
-          }
+          cat > routes/values.yaml << 'EOF'
+          # this file is auto-generated from routes/ directory
+          # do not edit manually - changes will be overwritten
+          routes:
           EOF
 
-          node convert-routes.js
+          echo 'processing route files...'
+          for file in routes/*.json; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file" .json)
+              echo " processing: $filename"
+
+              echo "  $filename: |" >> routes/values.yaml
+              cat "$file" | sed 's/^/    /' >> routes/values.yaml
+              echo '' >> routes/values.yaml
+            fi
+          done
+
+          echo "generated routes/values.yaml with $(ls routes/*.json | wc -l) routes"
       - name: check for changes
         id: git-check
         run: |
