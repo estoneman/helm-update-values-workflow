@@ -1,0 +1,96 @@
+name: Update values.yaml from routes
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'routes/**'
+  workflow_dispatch:
+jobs:
+  update-values:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: install dependencies
+        run: |
+          npm install -g js-yaml
+      - name: generate values.yaml from routes
+        run: |
+          #!/bin/bash
+          cat > convert-routes.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const yaml = require('js-yaml');
+          const routesDir = './routes';
+          const outputFile = './routes/values.yaml';
+          const routes = {};
+          
+          try {
+            const files = fs.readdirSync(routesDir);
+            files.forEach(file => {
+              if (file.endswith('.json')) {
+                const filePath = path.join(routesDir, file);
+                const routeName = path.basename(file, '.json');
+
+                try {
+                  const content = fs.readFileSync(filePath, 'utf8');
+                  const jsonData = JSON.parse(content);
+                  routes[routeName] = jsonData;
+                  console.log(`Processed: ${routeName}`);
+                } catch (error) {
+                  console.error(`Error processing ${file}:`, error.message);
+                }
+              }
+
+              const valuesData = {
+                '# this file is auto-generated from routes/ directory': null,
+                '# do not edit manually - changes will be overwritten': null,
+                routes: routes
+              }
+
+              const yamlStr = yaml.dump(valusData, {
+                indent: 2,
+                lineWidth: -1,
+                noRefs: true,
+                sortKeys: false
+              });
+
+              const cleanedYaml = yamlStr
+                .replace(/^'# [^']*': null$/gm, (match) => match.replace(/^'|': null$/g, ''))
+                .replace(/^  /gm, '')
+                .replace(/^# (.*)$/gm, '# $1');
+
+              fs.writeFileSync(outputFile, cleanedYaml);
+              console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
+            });
+          } catch (error) {
+            console.error('error: ', error.message);
+            process.exit(1);
+          }
+          EOF
+
+          node convert-routes.js
+      - name: check for changes
+        id: git-check
+        run: |
+          git diff --exit-code routes/values.yaml || echo 'changed=true' >> $GITHUB_OUTPUT
+      - name: commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email 'action@github.com'
+          git config --local user.name 'GitHub Action'
+          git add routes/values.yaml
+          git commit -m 'auto-update routes/values.yaml from route files [skip ci]'
+          git push
+      - name: no changes detected
+        if: steps.git-check.outputs.changed != 'true'
+        run: |
+          echo 'no chantges detected in routes. routes/values.yaml is up to date.'
