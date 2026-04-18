@@ -6,6 +6,7 @@
         "optionTwo": "fooBar"
     },
     "capabilities": [
-        "SYSADMIN"
+        "SYSADMIN",
+        "AUDIT_WRITE"
     ]
 }

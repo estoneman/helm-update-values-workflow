@@ -21,7 +21,7 @@ jobs:
           node-version: '18'
       - name: install dependencies
         run: |
-          apt-get install -y jq
+          sudo apt-get install -y jq
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
