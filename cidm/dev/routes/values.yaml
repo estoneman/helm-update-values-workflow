@@ -28,11 +28,3 @@ routes:
       ]
     }
 
-  20-newRoute: |
-    {
-      "id": "devNewRoute",
-      "options": {
-        "test": 1
-      }
-    }
-
