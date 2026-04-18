@@ -62,19 +62,7 @@ jobs:
                 routes: routes
               }
 
-              const yamlStr = yaml.dump(valuesData, {
-                indent: 2,
-                lineWidth: -1,
-                noRefs: true,
-                sortKeys: false
-              });
-
-              const cleanedYaml = yamlStr
-                .replace(/^'# [^']*': null$/gm, (match) => match.replace(/^'|': null$/g, ''))
-                .replace(/^  /gm, '')
-                .replace(/^# (.*)$/gm, '# $1');
-
-              fs.writeFileSync(outputFile, cleanedYaml);
+              fs.writeFileSync(outputFile, valuesData);
               console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
               console.log(cleanedYaml);
             });
