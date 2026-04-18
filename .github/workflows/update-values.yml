@@ -8,47 +8,24 @@ on:
 jobs:
   update-values:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './.github/scripts'
     permissions:
       contents: write
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
       - name: install dependencies
         run: |
           sudo apt-get install -y jq
+      - name: mark generation script as executable
+        run: chmod u+x generate_routes.sh
       - name: generate values.yaml from routes
         run: |
-          #!/bin/bash
-          set -o errexit
-          set -o pipefail
-          set -o nounset
-
-          cat > routes/values.yaml << 'EOF'
-          # this file is auto-generated from routes/ directory
-          # do not edit manually - changes will be overwritten
-          routes:
-          EOF
-
-          echo 'processing route files...'
-          for file in routes/*.json; do
-            if [ -f "$file" ]; then
-              filename=$(basename "$file" .json)
-              echo " processing: $filename"
-
-              echo "  $filename: |" >> routes/values.yaml
-              jq -r . "$file" | sed 's/^/    /' >> routes/values.yaml
-              echo '' >> routes/values.yaml
-            fi
-          done
-
-          echo "generated routes/values.yaml with $(ls routes/*.json | wc -l) routes"
-          cat routes/values.yaml
+          ./generate_routes.sh
       - name: check for changes
         id: git-check
         run: |
