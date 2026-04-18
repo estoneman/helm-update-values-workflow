@@ -3,20 +3,24 @@
 routes:
   00-routeOne: |
     {
-        "id": "routeOne",
-        "ops": {
-            "200": "<html><body>you are allowed</body></html>",
-            "403": "<html><body>you are denied</body></html>"
-        }
+      "id": "routeOne",
+      "ops": {
+        "200": "<html><body>you are allowed</body></html>",
+        "403": "<html><body>you are denied</body></html>"
+      }
     }
 
   10-myRoute: |
     {
-        "id": "myRoute",
-        "url": "https://example.com",
-        "config": {
-            "optionOne": "valueOne",
-            "optionTwo": "fooBar"
-        }
+      "id": "myRoute",
+      "url": "https://example.com",
+      "config": {
+        "optionOne": "valueOne",
+        "optionTwo": "fooBar"
+      },
+      "capabilities": [
+        "SYSADMIN",
+        "AUDIT_WRITE"
+      ]
     }
 
