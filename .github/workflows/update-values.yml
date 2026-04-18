@@ -61,7 +61,7 @@ jobs:
                 routes: routes
               }
 
-              const yamlStr = yaml.dump(valusData, {
+              const yamlStr = yaml.dump(valuesData, {
                 indent: 2,
                 lineWidth: -1,
                 noRefs: true,
