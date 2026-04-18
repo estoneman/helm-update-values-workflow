@@ -51,7 +51,8 @@ jobs:
                   routes[routeName] = jsonData;
                   console.log(`Processed: ${routeName}`);
                 } catch (error) {
-                  console.error(`Error processing ${file}:`, error.message);
+                  console.error(`error processing ${file}:`, error.message);
+                  process.exit(1);
                 }
               }
 
@@ -75,6 +76,7 @@ jobs:
 
               fs.writeFileSync(outputFile, cleanedYaml);
               console.log(`generated ${outputFile} with ${Object.keys(routes).length} routes`);
+              console.log(cleanedYaml);
             });
           } catch (error) {
             console.error('error: ', error.message);
