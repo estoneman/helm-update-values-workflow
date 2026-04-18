@@ -21,10 +21,10 @@ jobs:
           node-version: '18'
       - name: install dependencies
         run: |
-          npm install -g js-yaml
+          npm install js-yaml
       - name: show available modules
         run: |
-          npm -g ls
+          npm ls
       - name: generate values.yaml from routes
         run: |
           #!/bin/bash
