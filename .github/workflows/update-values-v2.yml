@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
-          git add routes/values.yaml
+          git add cidm/dev/routes/values.yaml
           git commit -m 'auto-update cidm/dev/routes/values.yaml from route files [skip ci]'
           git push
       - name: no changes detected
@@ -61,7 +61,7 @@ jobs:
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
-          git add routes/values.yaml
+          git add cidm/test/routes/values.yaml
           git commit -m 'auto-update cidm/test/routes/values.yaml from route files [skip ci]'
           git push
       - name: no changes detected
@@ -91,7 +91,7 @@ jobs:
         run: |
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'
-          git add routes/values.yaml
+          git add cidm/prod/routes/values.yaml
           git commit -m 'auto-update cidm/prod/routes/values.yaml from route files [skip ci]'
           git push
       - name: no changes detected
