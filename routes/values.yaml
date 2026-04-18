@@ -28,3 +28,11 @@ routes:
       ]
     }
 
+  20-newRoute: |
+    {
+      "id": "newRoute",
+      "options": {
+        "test": 1
+      }
+    }
+
