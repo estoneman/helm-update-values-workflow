@@ -22,6 +22,8 @@ jobs:
       - name: install dependencies
         run: |
           npm install js-yaml
+          which npm
+          which node
       - name: show available modules
         run: |
           npm ls
