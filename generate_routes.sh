@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ "${1:-x}" = 'x'] && exit 1
+[ "${1:-x}" = 'x' ] && exit 1
 
 env="$1"
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
